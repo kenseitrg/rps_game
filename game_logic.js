@@ -15,51 +15,69 @@ const rules = {
         "scissors": 0
     }
 };
+
+let gameState = {
+    "round": 0,
+    "score": 0
+};
 function computerPlay() {
      const keys = ["rock", "paper", "scissors"];
      let index = Math.floor(Math.random()*3);
      return keys[index];
 }
-
-function playRound(playerSelection, computerSelection) {
-    const playerChoise = playerSelection.toLowerCase();
-    if (!rules.hasOwnProperty(playerChoise)) {
-        console.log("Invalid choise");
-        return -999;
-    }
-    return rules[playerChoise][computerSelection];
-}
-function game() {
-    const messages = {
-        "0": "Draw",
-        "1": "Win",
-        "-1": "Loose"
-    }
-    let resultArr = [0,0,0,0,0];
-    for (let i=0; i < resultArr.length; i++) {
-        let player = window.prompt("Please select rock/paper/scissors", "");
-        let result = playRound(player, computerPlay());
-        if (result == -999) {
-            i--;
+function updateGameState(result) {
+    gameState.round += 1;
+    gameState.score += result;
+    document.getElementById("round").textContent =
+        `Round ${gameState.round} of 5`;
+    if (gameState.round == 5) {
+        if (gameState.score == 0) {
+            const message = `Game ended as a draw. 
+                Final score ${gameState.score}`;
+            document.getElementById("final-result").textContent = message;
+        }
+        else if (gameState.score < 0) {
+            const message = `You lost this game. 
+                Final score ${gameState.score}`;
+            document.getElementById("final-result").textContent = message;
         }
         else {
-            console.log(messages[result]);
-            resultArr[i] = result;
+            const message = `You won this game. 
+                Final score ${gameState.score}`;
+            document.getElementById("final-result").textContent = message;
         }
-    }
-    const finalScore = resultArr.reduce((cur, next) => {
-        return cur + next;
-    });
-    if (finalScore > 0) {
-        alert("You won");
-    }
-    else if (finalScore < 0) {
-        alert("You loose");
+        gameState.round = 0;
+        gameState.score = 0;
     }
     else {
-        alert("Unlikely draw");
+        const message = `Current score is ${gameState.score}`;
+        document.getElementById("final-result").textContent = message;
     }
-    return finalScore;
+    return 0;
 }
 
-console.log(game());
+function playRound(event) {
+    const playerChoise = event.target.id.toLowerCase();
+    const computerSelection = computerPlay();
+    const messages = {"0": "It's a draw",
+        "1": "You won:)",
+        "-1": "You lost:("};
+    if (!rules.hasOwnProperty(playerChoise)) {
+        return -999;
+    }
+    const result = rules[playerChoise][computerSelection];
+    const message = `${event.target.textContent} vs ${computerSelection} - 
+        ${messages[result]}`;
+    document.getElementById("round-result").textContent = message;
+    updateGameState(result);
+    return 0;
+}
+
+window.addEventListener("load", () => {
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+            playRound(e);
+        });
+    });
+});
