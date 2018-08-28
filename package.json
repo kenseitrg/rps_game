@@ -1,0 +1,23 @@
+{
+  "name": "rps_game",
+  "version": "1.0.0",
+  "description": "Rock paper scissors game",
+  "main": "game_logic.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kenseitrg/rps_game.git"
+  },
+  "keywords": [
+    "game",
+    "test"
+  ],
+  "author": "Alexander Milekhin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kenseitrg/rps_game/issues"
+  },
+  "homepage": "https://github.com/kenseitrg/rps_game#readme"
+}
